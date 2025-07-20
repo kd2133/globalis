@@ -1,0 +1,18 @@
+# Virtuelle Umgebung
+venv/
+
+# Bytecode & Cache
+__pycache__/
+*.pyc
+
+# Lokale Datenbank & Exporte
+data/gsi_data.db
+data/gsi_export_*.csv
+
+# PyCharm-Projektdateien
+.idea/
+
+# Sonstiges
+*.log
+*.bak
+AppData/
