@@ -16,3 +16,4 @@ data/gsi_export_*.csv
 *.log
 *.bak
 AppData/
+.env
