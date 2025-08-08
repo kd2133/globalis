@@ -11,7 +11,7 @@ from utils.helpers import (
     get_news_contrast
 )
 
-# Datenbank initialisieren
+# Initialisiert die Datenbank und legt die Tabelle für die Analyse-Daten an
 def init_db():
     os.makedirs('data', exist_ok=True)
     conn = sqlite3.connect('data/gsi_data.db')
@@ -28,30 +28,20 @@ def init_db():
         print("❌ Fehler: Tabelle 'sentiment_data' konnte nicht erstellt werden.")
     conn.close()
 
-# Daten in JSON speichern
+# Speichert die Daten als JSON (z.B. für Backups oder historische Analysen)
 def save_to_json(data, filename='data/historical_data.json'):
     os.makedirs('data', exist_ok=True)
     with open(filename, 'w') as f:
         json.dump(data, f, indent=4)
     print(f"✅ JSON-Datei gespeichert: {filename}")
 
-# Daten aus JSON laden
-def load_from_json(filename='data/historical_data.json'):
-    if not os.path.exists(filename):
-        print(f"⚠️ JSON-Datei {filename} nicht gefunden. Verwende Standarddaten.")
-        return []
-    with open(filename, 'r') as f:
-        return json.load(f)
-
-# Daten in DB speichern
+# Speichert einen Datensatz in die Datenbank und berechnet alle Scores
 def save_to_db(data):
     conn = sqlite3.connect('data/gsi_data.db')
     c = conn.cursor()
+    # Berechne alle relevanten Scores für die Analyse
     presence_score = calculate_social_presence_score(data["social_presence"])
-    engagement_score = calculate_social_engagement_score(
-        data["likes"], data["shares"], data["comments"], data["views"]
-    )
-    visibility = calculate_social_visibility(presence_score, engagement_score)
+    visibility = calculate_social_visibility(presence_score)  # Engagement wird nicht genutzt
     visibility_factor = calculate_visibility_factor(visibility)
     sentiment_scaled = calculate_sentiment_scaled(data["sentiment_raw"])
     impact_score = calculate_impact_score(visibility_factor, sentiment_scaled)
@@ -68,11 +58,11 @@ def save_to_db(data):
     except sqlite3.Error as e:
         print(f"❌ Fehler beim Speichern in DB: {e}")
     conn.close()
+    # Rückgabe der wichtigsten Scores für Kontrolle und Debugging
     return {
         "topic": data["topic"],
         "country": data["country"],
         "Social Presence Score": presence_score,
-        "Social Engagement Score": engagement_score,
         "Social Visibility": visibility,
         "Social Visibility Factor": visibility_factor,
         "Sentiment (scaled)": sentiment_scaled,
@@ -80,7 +70,7 @@ def save_to_db(data):
         "News Contrast": get_news_contrast(presence_score, data["news_presence"])
     }
 
-# Datenbankinhalt prüfen
+# Zeigt den aktuellen Inhalt der Datenbank an (für Kontrolle und Debugging)
 def check_db():
     try:
         conn = sqlite3.connect('data/gsi_data.db')
@@ -97,7 +87,7 @@ def check_db():
     except sqlite3.Error as e:
         print(f"❌ Fehler beim Prüfen der DB: {e}")
 
-# Testdaten
+# Beispiel-Testdaten für die Datenbank (verschiedene Länder und Themen, inkl. Extremwerte)
 test_data = [
     {
         "topic": "Inflation",
@@ -120,7 +110,7 @@ test_data = [
         "views": 1000,
         "sentiment_raw": 30.0,
         "news_presence": 0.9
-    } ,
+    },
     {
         "topic": "Climate Change",
         "country": "USA",
@@ -131,7 +121,7 @@ test_data = [
         "views": 10000,
         "sentiment_raw": 50.0,
         "news_presence": 0.8
-    } ,
+    },
     {
         "topic": "Healthcare",
         "country": "UK",
@@ -142,8 +132,7 @@ test_data = [
         "views": 5000,
         "sentiment_raw": 30.0,
         "news_presence": 0.7
-    } ,
-  
+    },
     {
         "topic": "Education",
         "country": "Canada",
@@ -177,7 +166,7 @@ test_data = [
         "sentiment_raw": 30.0,
         "news_presence": 0.9
     },
-     {
+    {
         "topic": "Climate Change",
         "country": "United States",
         "social_presence": 0.65,
@@ -231,55 +220,55 @@ test_data = [
         "views": 60000,
         "sentiment_raw": 25.0,
         "news_presence": 0.85
-    }, 
-    #EXTREMWERTE
+    },
+    # Extremwerte für Robustheitstests
     {
-    "topic": "Corruption",
-    "country": "Russia",
-    "social_presence": 0.95,    # Sehr hohe Präsenz
-    "likes": 5000,
-    "shares": 4000,
-    "comments": 3000,
-    "views": 200000,
-    "sentiment_raw": 10.0,      # Sehr negatives Sentiment
-    "news_presence": 0.8
-  },
-  {
-    "topic": "Space Exploration",
-    "country": "USA",
-    "social_presence": 0.1,     # Sehr niedrige Präsenz
-    "likes": 50,
-    "shares": 20,
-    "comments": 10,
-    "views": 5000,
-    "sentiment_raw": 90.0,      # Sehr positives Sentiment
-    "news_presence": 0.2
-  },
-  {
-    "topic": "Technology Advances",
-    "country": "Japan",
-    "social_presence": 1.0,     # Maximale Präsenz
-    "likes": 15000,
-    "shares": 12000,
-    "comments": 8000,
-    "views": 500000,
-    "sentiment_raw": 50.0,      # Neutrales Sentiment
-    "news_presence": 1.0        # Maximal präsent in den Medien
-  },
-  {
-    "topic": "Unemployment",
-    "country": "Greece",
-    "social_presence": 0.05,    # Sehr geringe Präsenz
-    "likes": 0,
-    "shares": 0,
-    "comments": 0,
-    "views": 100,
-    "sentiment_raw": 5.0,       # Extrem negatives Sentiment
-    "news_presence": 0.9        # Sehr starke Medienpräsenz
-  }
+        "topic": "Corruption",
+        "country": "Russia",
+        "social_presence": 0.95,    # Sehr hohe Präsenz
+        "likes": 5000,
+        "shares": 4000,
+        "comments": 3000,
+        "views": 200000,
+        "sentiment_raw": 10.0,      # Sehr negatives Sentiment
+        "news_presence": 0.8
+    },
+    {
+        "topic": "Space Exploration",
+        "country": "USA",
+        "social_presence": 0.1,     # Sehr niedrige Präsenz
+        "likes": 50,
+        "shares": 20,
+        "comments": 10,
+        "views": 5000,
+        "sentiment_raw": 90.0,      # Sehr positives Sentiment
+        "news_presence": 0.2
+    },
+    {
+        "topic": "Technology Advances",
+        "country": "Japan",
+        "social_presence": 1.0,     # Maximale Präsenz
+        "likes": 15000,
+        "shares": 12000,
+        "comments": 8000,
+        "views": 500000,
+        "sentiment_raw": 50.0,      # Neutrales Sentiment
+        "news_presence": 1.0        # Maximal präsent in den Medien
+    },
+    {
+        "topic": "Unemployment",
+        "country": "Greece",
+        "social_presence": 0.05,    # Sehr geringe Präsenz
+        "likes": 0,
+        "shares": 0,
+        "comments": 0,
+        "views": 100,
+        "sentiment_raw": 5.0,       # Extrem negatives Sentiment
+        "news_presence": 0.9        # Sehr starke Medienpräsenz
+    }
 ]
 
-# Ausführen
+# Hauptausführung: Initialisiert die DB, speichert Testdaten und zeigt Ergebnisse
 if __name__ == "__main__":
     init_db()
     save_to_json(test_data)
