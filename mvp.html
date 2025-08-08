@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globalis Intelligence</title>
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.9/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Source+Code+Pro:wght@400;500&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #d3d3d3;
+        }
+        #error {
+            color: #ff4500;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .animate-fly-in {
+            animation: flyIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes flyIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .pulse {
+            animation: pulse 1.5s ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .card-hover:hover {
+            box-shadow: 0 0 14px rgba(255, 69, 0, 0.3);
+            transition: all 0.2s ease-in-out;
+            opacity: 1;
+        }
+        .hero {
+            background-color: #101010;
+            border-bottom: 1px solid #333333;
+        }
+        .section-bg {
+            background-color: #1c1c1c;
+            border: 1px solid #333333;
+        }
+        .text-accent {
+            color: #ff4500;
+        }
+        .bg-accent {
+            background-color: #ff4500;
+        }
+        .bg-warning {
+            background-color: #ffd700;
+        }
+        .topic-card {
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            min-height: 320px; 
+            padding: 16px;
+        }
+        .rounded-slight {
+            border-radius: 0;
+        }
+        .monospace {
+            font-family: 'Source Code Pro', monospace;
+        }
+        .quote-shadow {
+            padding: 8px;
+            background-color: #101010;
+            border-left: 4px solid #ff4500;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+        .gsi-container {
+            border: 1px solid #333333;
+            padding: 16px;
+            background-color: #1c1c1c;
+        }
+        .gsi-bar {
+            background-color: #333333;
+            height: 8px;
+            overflow: hidden;
+        }
+        .gsi-fill {
+            height: 8px;
+            transition: width 0.5s;
+        }
+        .impact-score-header {
+            text-align: center;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 4px;
+        }
+        .impact-score-value {
+            text-align: center;
+            background-color: rgba(255, 69, 0, 0.2);
+            font-size: 8rem; /* Huge for pop */
+            padding: 4px;
+            border-radius: 2px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .topic-title {
+            border-bottom: 1px solid #ff4500;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            min-height: 56px; /* sorgt für gleiche Höhe, auch bei Umbruch */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mini-bar {
+            background-color: #333333;
+            height: 4px;
+            width: 100%;
+            overflow: hidden;
+            margin-top: -4px;
+        }
+        .mini-fill {
+            height: 4px;
+            background-color: #ff4500;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <div id="error"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const App = () => {
+            const [pyodide, setPyodide] = useState(null);
+            const [posts, setPosts] = useState([]);
+            const [allPostsVisible, setAllPostsVisible] = useState(false);
+            const [loadingPhase, setLoadingPhase] = useState(null);
+            const [topicResults, setTopicResults] = useState([]);
+            const [gsi, setGsi] = useState(null);
+            const [gsiLabel, setGsiLabel] = useState('');
+            const [breakingBarText, setBreakingBarText] = useState('');
+            const [narrativeInsight, setNarrativeInsight] = useState('');
+            const [error, setError] = useState(null);
+            const [analyzed, setAnalyzed] = useState(false);
+
+            const mockPosts = [
+                "New safety regulations are a joke, accidents still happening!",
+                "Inflation is killing us, prices up 10% in a month!",
+                "Why isn’t anyone doing more for the environment?",
+                "Migration policies are failing, borders are a mess.",
+                "Energy costs are through the roof, need renewables now!",
+                "Crime rates are up, where’s the safety we were promised?",
+                "Can’t afford groceries anymore, inflation is out of control!",
+                "Climate change is real, floods ruined my town.",
+                "We need better integration for migrants, this isn’t working.",
+                "Solar energy is the only way forward, fossil fuels suck.",
+                "Streets feel unsafe at night, what’s the government doing?",
+                "My rent went up again, thanks to inflation!",
+                "Protecting our planet should be priority one!",
+                "Migration numbers are stable, but tensions are high.",
+                "Wind turbines are saving us money, more please!",
+                "Safety report shows no improvement, so frustrating.",
+                "Inflation forecast is grim, no relief in sight.",
+                "Deforestation is killing our ecosystems, act now!",
+                "Refugee crisis is getting worse, need solutions.",
+                "Renewable energy is the future, let’s invest!",
+                "Can’t believe gas prices, inflation is insane!",
+                "More solar farms needed, energy bills are too high!",
+                "Climate protests are growing, people are fed up.",
+                "Border security is a mess, migration policies failing.",
+                "Safety measures in schools are not enough!",
+                "Groceries cost a fortune now, thanks inflation.",
+                "Loving the new wind energy project in my town!",
+                "Pollution is out of control, save our rivers!",
+                "Migrants need support, not walls.",
+                "Crime stats are worrying, safety first!",
+                "Inflation is eating my savings, help!",
+                "Solar panels are a game-changer for energy costs.",
+                "Why no action on climate? It’s urgent!",
+                "Migration debates are so heated right now.",
+                "Feeling unsafe walking home, more police needed.",
+                "Prices for everything are up, inflation sucks!",
+                "Renewables are the only way to save energy costs.",
+                "Air quality is terrible, environment needs help.",
+                "Integration programs for migrants are failing.",
+                "Safety concerns in my neighborhood are real.",
+                "Can’t keep up with rising costs, inflation is brutal!",
+                "Energy transition to renewables is too slow!",
+                "Climate change is hitting us hard, floods everywhere.",
+                "Migration policies need a complete overhaul.",
+                "Safety patrols aren’t enough, crime is up.",
+                "Inflation is making life unaffordable!",
+                "Wind energy is great, but we need more!",
+                "Our forests are disappearing, save the environment!",
+                "Migrant camps are overcrowded, do something!",
+                "Safety issues are ignored, people are scared.",
+                "Inflation is ruining small businesses!",
+                "Energy prices are crazy, renewables now!",
+                "Climate change is a crisis, act faster!",
+                "Migration rules are too strict, need balance.",
+                "No one feels safe here anymore, fix it!",
+                "Can’t afford rent, inflation is killing me!",
+                "Solar power is amazing, let’s expand it!",
+                "Environment is in trouble, stop ignoring it!",
+                "Migrant crisis needs urgent attention.",
+                "Safety stats are alarming, take action!",
+                "Inflation is out of hand, prices are nuts!",
+                "Energy costs are killing us, go renewable!",
+                "Climate change is destroying our crops!",
+                "Migration policies aren’t working, chaos!",
+                "Safety is a big issue, more needs to be done.",
+                "Inflation makes everything so expensive!",
+                "Renewable energy is our only hope!",
+                "Pollution is choking our cities, act now!",
+                "Migrants deserve better treatment, fix it!",
+                "Crime is up, where’s the safety plan?",
+                "Inflation is crushing families, help us!",
+                "Energy bills are insane, renewables please!",
+                "Climate change is scary, we need action!",
+                "Migration system is broken, reform it!",
+                "Safety concerns are growing, do something!",
+                "Can’t afford basics anymore, inflation!",
+                "Solar energy is the way to go!",
+                "Environment needs saving, stop delays!",
+                "Migration issues are causing tension.",
+                "Safety is getting worse, help!",
+                "Inflation is a nightmare, prices soaring!",
+                "Energy prices are too high, go green!",
+                "Climate change is real, save our planet!",
+                "Migration policies need to change now!",
+                "Safety is a priority, act fast!",
+                "Inflation is killing my budget!",
+                "Renewables are the future, invest now!",
+                "Environment is in crisis, do something!",
+                "Migration crisis is out of control!",
+                "Safety measures aren’t working, fix it!",
+                "Prices are crazy, inflation is brutal!",
+                "Energy costs are insane, renewables now!",
+                "Climate change is urgent, act today!",
+                "Migration needs better solutions!",
+                "Safety is a huge concern, help us!"
+            ];
+
+            useEffect(() => {
+                setPosts(mockPosts.slice(0, 20));
+            }, []);
+
+            useEffect(() => {
+                async function loadPyodide() {
+                    try {
+                        const py = await window.loadPyodide();
+                        await py.loadPackage(['numpy', 'pandas']);
+                        await py.runPythonAsync(`
+import numpy as np
+import pandas as pd
+from statistics import median
+
+def calculate_combined_score(presence_ratio, min_rel, med_rel, max_rel, sentiment):
+    if not isinstance(presence_ratio, (int, float)) or presence_ratio < 0:
+        return 50.0
+    if not isinstance(sentiment, (int, float)) or sentiment < -1 or sentiment > 1:
+        return 50.0
+    if max_rel <= min_rel:
+        return 50.0
+
+    if presence_ratio <= min_rel or abs(sentiment) <= 0.01:
+        return 50.0
+    elif presence_ratio >= max_rel:
+        return max(0.0, min(100.0, 50.0 + sentiment * 50.0))
+    else:
+        abs_sentiment = abs(sentiment)
+        if sentiment > 0.01:
+            if presence_ratio <= med_rel:
+                target = 50.0 + 25.0 * abs_sentiment
+                score = 50.0 + ((presence_ratio - min_rel) / (med_rel - min_rel)) * (target - 50.0)
+            else:
+                start = 50.0 + 25.0 * abs_sentiment
+                target = 50.0 + 50.0 * abs_sentiment
+                score = start + ((presence_ratio - med_rel) / (max_rel - med_rel)) * (target - start)
+            return min(100.0, score)
+        else:
+            if presence_ratio <= med_rel:
+                target = 50.0 - 25.0 * abs_sentiment
+                score = 50.0 - ((presence_ratio - min_rel) / (med_rel - min_rel)) * (50.0 - target)
+            else:
+                start = 50.0 - 25.0 * abs_sentiment
+                target = 50.0 - 50.0 * abs_sentiment
+                score = start - ((presence_ratio - med_rel) / (max_rel - med_rel)) * (start - target)
+            return max(0.0, score)
+
+DEFAULT_STATS = {'min_rel': 0.01, 'med_rel': 0.05, 'max_rel': 0.5, 'history': []}
+
+class GlobalisPipeline:
+    def __init__(self):
+        self.selected_topics = ['Inflation', 'Migration', 'Environment', 'Energy', 'Safety']
+        self.historical_stats = {
+            'Inflation': {'min_rel': 0.01, 'med_rel': 0.25, 'max_rel': 0.5, 'history': []},
+            'Migration': {'min_rel': 0.01, 'med_rel': 0.16666666666666666, 'max_rel': 0.5, 'history': []},
+            'Environment': {'min_rel': 0.01, 'med_rel': 0.16666666666666666, 'max_rel': 0.5, 'history': []},
+            'Energy': {'min_rel': 0.01, 'med_rel': 0.25, 'max_rel': 0.5, 'history': []},
+            'Safety': {'min_rel': 0.01, 'med_rel': 0.16666666666666666, 'max_rel': 0.5, 'history': []}
+        }
+
+    def calculate_weighted_gsi(self, df):
+        if df.empty:
+            return 0.0
+        total_weight = df['presence_ratio'].sum()
+        if total_weight == 0:
+            return 0.0
+        weighted_sum = (df['impact_score'] * df['presence_ratio']).sum()
+        return round(weighted_sum / total_weight, 2)
+
+    def analyze_topic(self, post):
+        topic_map = {
+            "New safety regulations are a joke, accidents still happening!": "Safety",
+            "Inflation is killing us, prices up 10% in a month!": "Inflation",
+            "Why isn’t anyone doing more for the environment?": "Environment",
+            "Migration policies are failing, borders are a mess.": "Migration",
+            "Energy costs are through the roof, need renewables now!": "Energy",
+            "Crime rates are up, where’s the safety we were promised?": "Safety",
+            "Can’t afford groceries anymore, inflation is out of control!": "Inflation",
+            "Climate change is real, floods ruined my town.": "Environment",
+            "We need better integration for migrants, this isn’t working.": "Migration",
+            "Solar energy is the only way forward, fossil fuels suck.": "Energy",
+            "Streets feel unsafe at night, what’s the government doing?": "Safety",
+            "My rent went up again, thanks to inflation!": "Inflation",
+            "Protecting our planet should be priority one!": "Environment",
+            "Migration numbers are stable, but tensions are high.": "Migration",
+            "Wind turbines are saving us money, more please!": "Energy",
+            "Safety report shows no improvement, so frustrating.": "Safety",
+            "Inflation forecast is grim, no relief in sight.": "Inflation",
+            "Deforestation is killing our ecosystems, act now!": "Environment",
+            "Refugee crisis is getting worse, need solutions.": "Migration",
+            "Renewable energy is the future, let’s invest!": "Energy",
+            "Can’t believe gas prices, inflation is insane!": "Inflation",
+            "More solar farms needed, energy bills are too high!": "Energy",
+            "Climate protests are growing, people are fed up.": "Environment",
+            "Border security is a mess, migration policies failing.": "Migration",
+            "Safety measures in schools are not enough!": "Safety",
+            "Groceries cost a fortune now, thanks inflation.": "Inflation",
+            "Loving the new wind energy project in my town!": "Energy",
+            "Pollution is out of control, save our rivers!": "Environment",
+            "Migrants need support, not walls.": "Migration",
+            "Crime stats are worrying, safety first!": "Safety",
+            "Inflation is eating my savings, help!": "Inflation",
+            "Solar panels are a game-changer for energy costs.": "Energy",
+            "Why no action on climate? It’s urgent!": "Environment",
+            "Migration debates are so heated right now.": "Migration",
+            "Feeling unsafe walking home, more police needed.": "Safety",
+            "Prices for everything are up, inflation sucks!": "Inflation",
+            "Renewables are the only way to save energy costs.": "Energy",
+            "Air quality is terrible, environment needs help.": "Environment",
+            "Integration programs for migrants are failing.": "Migration",
+            "Safety concerns in my neighborhood are real.": "Safety",
+            "Can’t keep up with rising costs, inflation is brutal!": "Inflation",
+            "Energy transition to renewables is too slow!": "Energy",
+            "Climate change is hitting us hard, floods everywhere.": "Environment",
+            "Migration policies need a complete overhaul.": "Migration",
+            "Safety patrols aren’t enough, crime is up.": "Safety",
+            "Inflation is making life unaffordable!": "Inflation",
+            "Wind energy is great, but we need more!": "Energy",
+            "Our forests are disappearing, save the environment!": "Environment",
+            "Migrant camps are overcrowded, do something!": "Migration",
+            "Safety issues are ignored, people are scared.": "Safety",
+            "Inflation is ruining small businesses!": "Inflation",
+            "Energy prices are crazy, renewables now!": "Energy",
+            "Climate change is a crisis, act faster!": "Environment",
+            "Migration rules are too strict, need balance.": "Migration",
+            "No one feels safe here anymore, fix it!": "Safety",
+            "Can’t afford rent, inflation is killing me!": "Inflation",
+            "Solar power is amazing, let’s expand it!": "Energy",
+            "Environment is in trouble, stop ignoring it!": "Environment",
+            "Migrant crisis needs urgent attention.": "Migration",
+            "Safety stats are alarming, take action!": "Safety",
+            "Inflation is out of hand, prices are nuts!": "Inflation",
+            "Energy costs are killing us, go renewable!": "Energy",
+            "Climate change is destroying our crops!": "Environment",
+            "Migration policies aren’t working, chaos!": "Migration",
+            "Safety is a big issue, more needs to be done.": "Safety",
+            "Inflation makes everything so expensive!": "Inflation",
+            "Renewable energy is our only hope!": "Energy",
+            "Pollution is choking our cities, act now!": "Environment",
+            "Migrants deserve better treatment, fix it!": "Migration",
+            "Crime is up, where’s the safety plan?": "Safety",
+            "Inflation is crushing families, help us!": "Inflation",
+            "Energy bills are insane, renewables please!": "Energy",
+            "Climate change is scary, we need action!": "Environment",
+            "Migration system is broken, reform it!": "Migration",
+            "Safety concerns are growing, do something!": "Safety",
+            "Can’t afford basics anymore, inflation!": "Inflation",
+            "Solar energy is the way to go!": "Energy",
+            "Environment needs saving, stop delays!": "Environment",
+            "Migration issues are causing tension.": "Migration",
+            "Safety is getting worse, help!": "Safety",
+            "Inflation is a nightmare, prices soaring!": "Inflation",
+            "Energy prices are too high, go green!": "Energy",
+            "Climate change is real, save our planet!": "Environment",
+            "Migration policies need to change now!": "Migration",
+            "Safety is a priority, act fast!": "Safety",
+            "Inflation is killing my budget!": "Inflation",
+            "Renewables are the future, invest now!": "Energy",
+            "Environment is in crisis, do something!": "Environment",
+            "Migration crisis is out of control!": "Migration",
+            "Safety measures aren’t working, fix it!": "Safety",
+            "Prices are crazy, inflation is brutal!": "Inflation",
+            "Energy costs are insane, renewables now!": "Energy",
+            "Climate change is urgent, act today!": "Environment",
+            "Migration needs better solutions!": "Migration",
+            "Safety is a huge concern, help us!": "Safety"
+        };
+        return topic_map.get(post, "Other");
+
+    def analyze_opinion(self, post):
+        return True
+
+    def analyze_sentiment(self, post):
+        sentiment_map = {
+            "New safety regulations are a joke, accidents still happening!": -0.7,
+            "Inflation is killing us, prices up 10% in a month!": -0.9,
+            "Why isn’t anyone doing more for the environment?": -0.6,
+            "Migration policies are failing, borders are a mess.": -0.8,
+            "Energy costs are through the roof, need renewables now!": -0.5,
+            "Crime rates are up, where’s the safety we were promised?": -0.65,
+            "Can’t afford groceries anymore, inflation is out of control!": -0.85,
+            "Climate change is real, floods ruined my town.": -0.75,
+            "We need better integration for migrants, this isn’t working.": -0.55,
+            "Solar energy is the only way forward, fossil fuels suck.": 0.8,
+            "Streets feel unsafe at night, what’s the government doing?": -0.6,
+            "My rent went up again, thanks to inflation!": -0.8,
+            "Protecting our planet should be priority one!": 0.7,
+            "Migration numbers are stable, but tensions are high.": -0.3,
+            "Wind turbines are saving us money, more please!": 0.75,
+            "Safety report shows no improvement, so frustrating.": -0.5,
+            "Inflation forecast is grim, no relief in sight.": -0.9,
+            "Deforestation is killing our ecosystems, act now!": -0.65,
+            "Refugee crisis is getting worse, need solutions.": -0.7,
+            "Renewable energy is the future, let’s invest!": 0.85,
+            "Can’t believe gas prices, inflation is insane!": -0.85,
+            "More solar farms needed, energy bills are too high!": -0.5,
+            "Climate protests are growing, people are fed up.": -0.6,
+            "Border security is a mess, migration policies failing.": -0.75,
+            "Safety measures in schools are not enough!": -0.65,
+            "Groceries cost a fortune now, thanks inflation.": -0.9,
+            "Loving the new wind energy project in my town!": 0.7,
+            "Pollution is out of control, save our rivers!": -0.7,
+            "Migrants need support, not walls.": 0.4,
+            "Crime stats are worrying, safety first!": -0.6,
+            "Inflation is eating my savings, help!": -0.85,
+            "Solar panels are a game-changer for energy costs.": 0.75,
+            "Why no action on climate? It’s urgent!": -0.65,
+            "Migration debates are so heated right now.": -0.4,
+            "Feeling unsafe walking home, more police needed.": -0.55,
+            "Prices for everything are up, inflation sucks!": -0.9,
+            "Renewables are the only way to save energy costs.": 0.65,
+            "Air quality is terrible, environment needs help.": -0.7,
+            "Integration programs for migrants are failing.": -0.6,
+            "Safety concerns in my neighborhood are real.": -0.65,
+            "Can’t keep up with rising costs, inflation is brutal!": -0.85,
+            "Energy transition to renewables is too slow!": -0.5,
+            "Climate change is hitting us hard, floods everywhere.": -0.75,
+            "Migration policies need a complete overhaul.": -0.7,
+            "Safety patrols aren’t enough, crime is up.": -0.6,
+            "Inflation is making life unaffordable!": -0.9,
+            "Wind energy is great, but we need more!": 0.7,
+            "Our forests are disappearing, save the environment!": -0.65,
+            "Migrant camps are overcrowded, do something!": -0.7,
+            "Safety issues are ignored, people are scared.": -0.65,
+            "Inflation is ruining small businesses!": -0.85,
+            "Energy prices are crazy, renewables now!": -0.5,
+            "Climate change is a crisis, act faster!": -0.75,
+            "Migration rules are too strict, need balance.": -0.4,
+            "No one feels safe here anymore, fix it!": -0.6,
+            "Can’t afford rent, inflation is killing me!": -0.9,
+            "Solar power is amazing, let’s expand it!": 0.8,
+            "Environment is in trouble, stop ignoring it!": -0.7,
+            "Migrant crisis needs urgent attention.": -0.65,
+            "Safety stats are alarming, take action!": -0.6,
+            "Inflation is out of hand, prices are nuts!": -0.85,
+            "Energy costs are too high, go renewable!": -0.5,
+            "Climate change is scary, we need action!": -0.75,
+            "Migration system is broken, reform it!": -0.7,
+            "Safety concerns are growing, do something!": -0.65,
+            "Can’t afford basics anymore, inflation!": -0.9,
+            "Solar energy is the way to go!": 0.75,
+            "Environment needs saving, stop delays!": -0.7,
+            "Migration issues are causing tension.": -0.4,
+            "Safety is getting worse, help!": -0.6,
+            "Inflation is a nightmare, prices soaring!": -0.85,
+            "Energy prices are too high, go green!": -0.5,
+            "Climate change is real, save our planet!": -0.75,
+            "Migration policies need to change now!": -0.7,
+            "Safety is a priority, act fast!": -0.65,
+            "Inflation is killing my budget!": -0.9,
+            "Renewables are the future, invest now!": 0.8,
+            "Environment is in crisis, do something!": -0.7,
+            "Migration crisis is out of control!": -0.65,
+            "Safety measures aren’t working, fix it!": -0.6,
+            "Prices are crazy, inflation is brutal!": -0.85,
+            "Energy costs are insane, renewables now!": -0.5,
+            "Climate change is urgent, act today!": -0.75,
+            "Migration needs better solutions!": -0.7,
+            "Safety is a huge concern, help us!": -0.65
+        };
+        return sentiment_map.get(post, 0.0);
+
+    def run(self, posts):
+        results = []
+        topic_counts = {topic: 0 for topic in self.selected_topics}
+        total_analyzed_posts = 0
+        valid_posts = []
+
+        topic_impact_scores = {topic: [] for topic in self.selected_topics}
+
+        for post in posts:
+            topic = self.analyze_topic(post)
+            if topic in self.selected_topics:
+                valid_posts.append((post, topic))
+                total_analyzed_posts += 1
+                topic_counts[topic] += 1
+
+        for post, topic in valid_posts:
+            sentiment = self.analyze_sentiment(post)
+            presence_ratio = topic_counts[topic] / total_analyzed_posts if total_analyzed_posts > 0 else 0.0
+            topic_stats = self.historical_stats.get(topic, DEFAULT_STATS)
+            min_rel = topic_stats['min_rel']
+            med_rel = topic_stats['med_rel']
+            max_rel = topic_stats['max_rel']
+            impact_score = calculate_combined_score(presence_ratio, min_rel, med_rel, max_rel, sentiment)
+            topic_impact_scores[topic].append(impact_score)
+            stance = "Contra" if sentiment < -0.3 else "Pro" if sentiment > 0.3 else "Neutral"
+            results.append({
+                'text': post,
+                'topic': topic,
+                'sentiment': sentiment,
+                'stance': stance,
+                'presence_ratio': presence_ratio,
+                'impact_score': impact_score
+            })
+
+        df = pd.DataFrame(results)
+        gsi_weighted = self.calculate_weighted_gsi(df)
+
+        topic_results = []
+        for topic in self.selected_topics:
+            if topic_impact_scores[topic]:
+                avg_impact_score = sum(topic_impact_scores[topic]) / len(topic_impact_scores[topic])
+                presence_ratio = topic_counts[topic] / total_analyzed_posts if total_analyzed_posts > 0 else 0.0
+                topic_results.append({
+                    'topic': topic,
+                    'presence_ratio': presence_ratio,
+                    'avg_impact_score': avg_impact_score
+                })
+
+        # Sample voices (min sentiment post)
+        sample_voices = {}
+        for topic in self.selected_topics:
+            topic_df = df[df['topic'] == topic]
+            if not topic_df.empty:
+                min_sent_index = topic_df['sentiment'].idxmin()
+                sample_voices[topic] = topic_df.loc[min_sent_index, 'text']
+
+        # Explained topics
+        explained_topics = []
+        emoji_map = {
+            'Inflation': '💰',
+            'Migration': '🧭',
+            'Environment': '🌱',
+            'Energy': '⚡',
+            'Safety': '🛡️'
+        }
+        for tr in topic_results:
+            topic = tr['topic']
+            presence = tr['presence_ratio'] * 100
+            score = tr['avg_impact_score']
+            emoji = emoji_map.get(topic, '❓')
+            if score > 75:
+                label = "✅ Positive momentum"
+            elif score > 55:
+                label = "⚖️ Moderate positive"
+            elif score >= 45:
+                label = "⚖️ Neutral"
+            elif score >= 25:
+                label = "⚠️ Volatility rising"
+            else:
+                label = "🚨 Strong dissatisfaction"
+            explained_topics.append({
+                'topic': topic,
+                'emoji': emoji,
+                'presence': presence,
+                'avg_impact_score': score,
+                'label': label,
+                'sampleVoice': sample_voices.get(topic, 'No voice found')
+            })
+
+        # GSI label
+        if gsi_weighted > 75:
+            gsi_label = "🌟 High positive impact – Public frustration is intensifying."
+        elif gsi_weighted > 55:
+            gsi_label = "✅ Moderate positive impact – Balanced sentiment."
+        elif gsi_weighted >= 45:
+            gsi_label = "⚖️ Near-neutral impact – Mixed views."
+        elif gsi_weighted >= 25:
+            gsi_label = "⚠️  Moderate Negative Shift — Early signs of volatility in key areas."
+        else:
+            gsi_label = "🚨 High negative impact – Intense dissatisfaction."
+
+        # Breaking bar
+        if gsi_weighted < 45:
+            breaking_bar = "🚨 ALERT: Public Pressure Rising – Signals Escalating Across Core Topics"
+        else:
+            breaking_bar = "📈 National Mood Stable: Positive shifts in key areas"
+
+        # Narrative
+        lowest = min(explained_topics, key=lambda x: x['avg_impact_score'])
+        highest = max(explained_topics, key=lambda x: x['avg_impact_score'])
+        narrative = f"Public frustration is surging around {lowest['topic']}. While {highest['topic']} remains a bright spot, the national mood is tilting toward systemic concern – a critical warning for decision-makers."
+
+        return {
+            'gsi': gsi_weighted,
+            'gsi_label': gsi_label,
+            'breaking_bar': breaking_bar,
+            'narrative': narrative,
+            'topic_results': explained_topics,
+            'df': df.to_dict('records')
+        }
+                        `);
+                        setPyodide(py);
+                    } catch (e) {
+                        setError("Failed to load Pyodide: " + e.message);
+                    }
+                }
+                loadPyodide();
+            }, []);
+
+            const handleSeeAllPosts = () => {
+                setPosts(mockPosts);
+                setAllPostsVisible(true);
+            };
+
+            const handleAnalyzePosts = async () => {
+                if (!pyodide) return;
+                try {
+                    const phases = ['Detecting Signals...', 'Mapping Emotional Pressure...', 'Calculating GIS Score...'];
+                    for (let i = 0; i < phases.length; i++) {
+                        setLoadingPhase(phases[i]);
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                    setLoadingPhase(null);
+
+                    const pyGlobals = pyodide.globals;
+                    pyGlobals.set('posts', pyodide.toPy(posts));
+                    const result = await pyodide.runPythonAsync(`
+pipeline = GlobalisPipeline()
+result = pipeline.run(posts)
+result
+                    `);
+                    pyGlobals.delete('posts');
+                    const output = result.toJs({dict_converter: Object.fromEntries});
+                    setGsi(output.gsi);
+                    setGsiLabel(output.gsi_label);
+                    setBreakingBarText(output.breaking_bar);
+                    setNarrativeInsight(output.narrative);
+                    let topicResultsArr = Array.isArray(output.topic_results) ? output.topic_results : [];
+                    topicResultsArr = topicResultsArr.map(item => typeof item === 'object' && item !== null ? item : {});
+                    setTopicResults(topicResultsArr);
+                    setAnalyzed(true);
+                } catch (e) {
+                    setError("Analysis failed: " + e.message);
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-black">
+                    {/* Hero Section */}
+                    <section className="hero pt-20 pb-20 text-center">
+                        <div className="max-w-4xl mx-auto px-4">
+                            <h1 className="text-5xl font-bold text-white mb-6 uppercase tracking-wide">
+                                If surveys were invented today — they wouldn’t ask. They’d detect.
+                            </h1>
+                            <p className="text-xl text-gray-500 mb-8">
+                                The world speaks.<span className="text-white font-bold"> Globalis</span> listens — before anyone else can.<br />
+                                No panels. No spin. Just the truth — direct from society, unfiltered and in real time.
+                            </p>
+                            <a
+                            href="#demo"
+                            className="inline-block w-64 bg-black text-white font-medium py-3 px-6 rounded-0 border border-white border-[1px] hover:bg-gray-900 transition"
+                            >
+                            See the demo ↓
+                            </a>
+                            <button
+                            className="inline-block w-64 bg-white text-black font-medium py-3 px-6 rounded-0 border border-white border-[1px] mt-4 hover:bg-gray-300 transition"
+                            >
+                            Early Access
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* How it Works Panel */}
+                    <section className="bg-black py-8 px-6 text-center text-gray-500">
+                        <h3 className="text-lg font-semibold uppercase tracking-wide mb-2 text-orange-500">How it Works 📡</h3>
+                        <p className="max-w-3xl mx-auto text-md monospace">
+                            No surveys. No polls. No guesswork.
+                            Globalis quantifies the pressure building in society — before your dashboard even blinks.
+                            This demo simulates national mood shifts.
+                            In production, it’s a real-time edge for policy, crisis, and risk.
+                        </p>
+                        <p className="max-w-3xl mx-auto text-white sm italic monospace mt-16">
+                            "Imagine watching a topic plunge into volatility — before the headlines hit."
+                        </p>
+                    </section>
+
+                    {/* Social Media Pulse Section */}
+                    <section id="demo" className="py-16 max-w-6xl mx-auto px-4">
+                        <h2 className="text-3xl font-bold text-white mb-2 text-center uppercase">
+                             Social media posts – Demo 🔬
+                        </h2>
+                        <p className="text-gray-500 text-center mb-4 monospace">(Simulated posts - In production: 100,000+ live signals daily)</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                            {posts.map((post, index) => (
+                                <div key={index} className="section-bg p-4 rounded-0 shadow">
+                                    <p className="text-gray-400 monospace">{post}</p>
+                                </div>
+                            ))}
+                        </div>
+                        {!allPostsVisible && (
+                            <div className="text-center mb-8">
+                                <button onClick={handleSeeAllPosts} className="bg-gray-800 text-white font-medium py-3 px-6 rounded-0 hover:bg-gray-700 transition">
+                                    See All Posts
+                                </button>
+                            </div>
+                        )}
+                        <div className="text-center">
+                            <button
+                                onClick={handleAnalyzePosts}
+                                className="bg-gray-800 text-orange-500 font-medium py-3 px-6 rounded-0 hover:bg-orange-500 hover:text-white transition"
+                                disabled={loadingPhase || !pyodide || analyzed}
+                            >
+                                {loadingPhase ? loadingPhase : 'Analyze Posts'}
+                            </button>
+                        </div>
+                        {loadingPhase && (
+                            <div className="text-center mt-8">
+                                <div className="inline-block w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                        )}
+                        {error && <p className="text-orange-500 text-center mt-4">{error}</p>}
+
+                        {/* Breaking Bar */}
+                        {breakingBarText && (
+                            <div className="w-full bg-black text-orange-500 text-center py-2 font-medium tracking-wide mt-8 animate-fly-in border-t border-b border-orange-500">
+                                {breakingBarText}
+                            </div>
+                        )}
+
+                        {/* GSI Impact Bar */}
+                        {gsi && (
+                            <div className="mt-8 gsi-container rounded-0 text-center animate-fly-in">
+                                <span className="absolute top-4 left-4 text-xs text-gray-400 monospace">Updated: 2 mins ago</span>
+                                <h2 className="text-3xl font-bold text-white mb-2 uppercase">
+                                    Globalis Intelligence Score (GIS)
+                                </h2>
+                                <div className="text-7xl font-bold text-orange-500 mb-4 monospace">
+                                    {gsi.toFixed(2)}
+                                </div>
+                                <div className="gsi-bar rounded-0">
+                                    <div 
+                                        className="gsi-fill transition-all duration-500"
+                                        style={{
+                                            width: `${gsi}%`,
+                                            backgroundColor: gsi < 25 ? '#ff4500' : gsi < 45 ? '#ffd700' : gsi < 75 ? '#ffd700' : '#00ff00'
+                                        }}
+                                    ></div>
+                                </div>
+                                <p className="mt-2 text-gray-500 monospace">{gsiLabel}</p>
+                            </div>
+                        )}
+
+                        {/* Topic Cards MoodBoard */}
+                        {topicResults.length > 0 && (
+                            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                                {topicResults.map((result, index) => (
+                                    <div 
+                                        key={index} 
+                                        className="section-bg rounded-0 shadow p-6 flex flex-col space-y-4 card-hover transition animate-fly-in topic-card"
+                                        style={{ animationDelay: `${index * 0.2}s` }}
+                                    >
+                                        <div className="topic-title monospace">{result.topic}</div>
+                                        <div className="impact-score-header text-gray-400 monospace">GIS:</div>
+                                        <div className="impact-score-value text-3xl font-bold text-white pulse monospace">{result.avg_impact_score.toFixed(1)}/100</div>
+                                        <div className="text-sm text-gray-500 monospace text-center whitespace-nowrap">{result.label}</div>
+                                        <div className="italic text-gray-500 fade-in quote-shadow monospace" style={{ animationDelay: '0.5s' }}>“{result.sampleVoice}”</div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* National Mood Insight */}
+                        {narrativeInsight && (
+                            <div className="mt-16 text-center">
+                                <h3 className="text-2xl font-semibold text-orange-500 uppercase tracking-wide mb-2">
+                                    ⚠️ National Mood Insight
+                                </h3>
+                                <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 monospace">
+                                    🚨 Inflation Panic Surges – Confidence Crumbles on Core Issues
+                                </h2>
+                                <p className="text-gray-500 max-w-2xl mx-auto text-lg monospace">
+                                    - "Energy bucks the trend with optimism, but overall sentiment dives – a red flag for leaders facing growing discontent."
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Final CTA */}
+                        <div className="text-center mt-20 pb-12">
+                            <h2 className="text-2xl font-bold text-white mb-12 uppercase">
+                                Beyond mood tracking. It’s pressure detection — for policy, crisis ops, and anyone who can’t afford to be late.
+                            </h2>
+                            <button className="bg-gray-800 text-white px-6 py-3 rounded-0 hover:bg-gray-700">
+                                Join Waitlist
+                            </button>
+                            <p className="text-sm text-gray-500 mt-2 monospace">
+                                Be the first to see real-time public pressure signals.
+                            </p>
+                            <p className="text-sm text-gray-500 mt-2 monospace">
+                               Live signals. Zero guesswork. Before anyone else.
+                            </p>
+                        </div>
+                    </section>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
