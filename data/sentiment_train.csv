@@ -1,0 +1,356 @@
+text,sentiment,opinion,topic,stance
+"Did you see the football match last night?",0.3,Yes,Other,Neutral
+"Honestly, I love baking cakes on weekends.",0.7,Yes,Other,Pro
+"My dog always wakes me up early.",0.2,Yes,Other,Neutral
+"That movie was hilarious!",0.8,Yes,Other,Pro
+"I can’t wait for summer holidays.",0.6,Yes,Other,Pro
+"Just bought a new bike, it’s awesome.",0.7,Yes,Other,Pro
+"Cooking with friends is the best.",0.6,Yes,Other,Pro
+"I spent all day playing video games.",0.4,Yes,Other,Neutral
+"She always listens to rock music.",0.3,Yes,Other,Neutral
+"I met my old friend at the café.",0.5,Yes,Other,Pro
+"Learning Spanish is actually fun.",0.6,Yes,Other,Pro
+"He draws amazing comics.",0.7,Yes,Other,Pro
+"The pizza here is so good.",0.8,Yes,Other,Pro
+"I binge-watched a whole series yesterday.",0.4,Yes,Other,Neutral
+"Gardening helps me relax after work.",0.5,Yes,Other,Pro
+"My sister moved to Berlin last month.",0.0,No,Other,Neutral
+"The concert tickets sold out so fast.",-0.3,Yes,Other,Contra
+"I love lazy Sundays.",0.6,Yes,Other,Pro
+"We really need to recycle more, don’t we?",0.4,Yes,Environment,Pro
+"It’s scary how hot summers are getting.",-0.7,Yes,Environment,Contra
+"New climate law passed today.",0.0,No,Environment,Neutral
+"Planting trees is such a good idea.",0.6,Yes,Environment,Pro
+"I wish more people cared about pollution.",0.4,Yes,Environment,Pro
+"I joined a group that picks up trash in parks.",0.6,Yes,Environment,Pro
+"Deforestation is a huge problem.",-0.8,Yes,Environment,Contra
+"Man, groceries are getting more expensive every week.",-0.8,Yes,Inflation,Contra
+"Did you see how much rent went up this year?",-0.7,Yes,Inflation,Contra
+"My paycheck doesn’t go as far as it used to.",-0.8,Yes,Inflation,Contra
+"Everything costs more now, it’s crazy.",-0.8,Yes,Inflation,Contra
+"Eating out is a luxury these days.",-0.7,Yes,Inflation,Contra
+"Bills keep rising, but my salary stays the same.",-0.8,Yes,Inflation,Contra
+"The price of coffee doubled since last year.",-0.7,Yes,Inflation,Contra
+"Shopping for clothes is way pricier than before.",-0.7,Yes,Inflation,Contra
+"Inflation is making life tough for everyone.",-0.9,Yes,Inflation,Contra
+"City’s got tons of new residents lately.",0.0,No,Migration,Neutral
+"Did you hear about the new immigration rules?",0.0,No,Migration,Neutral
+"My neighbor just came here from another country.",0.0,No,Migration,Neutral
+"More languages spoken at school now.",0.0,No,Migration,Neutral
+"Some families are waiting for their visas.",0.0,No,Migration,Neutral
+"My friend is applying for asylum.",0.0,No,Migration,Neutral
+"Town’s welcoming refugees this month.",0.0,No,Migration,Neutral
+"Many workers are coming from abroad.",0.0,No,Migration,Neutral
+"She moved here for a better job.",0.0,No,Migration,Neutral
+"Migration brings new cultures to our community.",0.5,Yes,Migration,Pro
+"Our electricity bill was huge last month.",-0.8,Yes,Energy,Contra
+"I switched to solar panels on my roof.",0.5,Yes,Energy,Pro
+"The city built a new wind farm nearby.",0.0,No,Energy,Neutral
+"Gas prices are always changing.",-0.4,Yes,Energy,Contra
+"We try to save energy at home.",0.4,Yes,Energy,Pro
+"My car runs on electricity now.",0.5,Yes,Energy,Pro
+"The power went out during the storm.",-0.6,Yes,Energy,Contra
+"Renewable energy is getting more popular.",0.5,Yes,Energy,Pro
+"Heating costs a lot in winter.",-0.7,Yes,Energy,Contra
+"They’re building more charging stations for electric cars.",0.0,No,Energy,Neutral
+"I feel safer with more street lights.",0.4,Yes,Safety,Pro
+"The school installed new security cameras.",0.0,No,Safety,Neutral
+"Police cars drive by our house every night.",0.0,No,Safety,Neutral
+"My parents worry about crime in the area.",-0.6,Yes,Safety,Contra
+"We lock our doors even during the day.",-0.5,Yes,Safety,Contra
+"There’s a new neighborhood watch group.",0.3,Yes,Safety,Pro
+"Kids wear helmets when biking now.",0.4,Yes,Safety,Pro
+"The city added more crosswalks for pedestrians.",0.0,No,Safety,Neutral
+"Emergency drills happen every month at work.",0.0,No,Safety,Neutral
+"I always check if the alarm is set before leaving.",0.3,Yes,Safety,Pro
+"Migration policies are a disaster, fix them now!",-1.0,Yes,Migration,Contra
+"Solar energy is kinda okay, but pricey.",0.2,Yes,Energy,Neutral
+"Inflation rose to 5.8% last quarter.",0.0,No,Inflation,Neutral
+"School safety measures are slightly better now.",0.3,Yes,Safety,Pro
+"Climate change is terrifying, act now!",-0.9,Yes,Environment,Pro
+"Energy prices are stable, says report.",0.0,No,Energy,Neutral
+"Migration could be great with better rules.",0.4,Yes,Migration,Pro
+"Inflation’s a nightmare, can’t afford food!",-1.0,Yes,Inflation,Contra
+"New safety laws passed today.",0.0,No,Safety,Neutral
+"Border security needs a total overhaul!",-0.8,Yes,Migration,Contra
+"Wind turbines are pretty cool, actually.",0.4,Yes,Energy,Pro
+"Inflation stats: 4% annual increase.",0.0,No,Inflation,Neutral
+"More cops on streets = less crime.",0.5,Yes,Safety,Pro
+"Pollution is choking our cities!",-0.9,Yes,Environment,Contra
+"Gas prices steady at $3.50/gallon.",0.0,No,Energy,Neutral
+"Open borders bring new ideas!",0.7,Yes,Migration,Pro
+"Economy’s crashing, thanks inflation!",-0.9,Yes,Inflation,Contra
+"Solar farms are a game-changer!",0.9,Yes,Energy,Pro
+"Crime rates dropped 2% this year.",0.0,No,Safety,Neutral
+"Migration laws are unfair to families!",-0.7,Yes,Migration,Contra
+"Electric cars are overrated, too costly.",-0.3,Yes,Energy,Contra
+"Inflation expected to ease by Q3.",0.0,No,Inflation,Neutral
+"School security upgrades announced.",0.0,No,Safety,Neutral
+"Climate policiesAscension Island policies are too weak!",-0.8,Yes,Environment,Contra
+"Nuclear energy is safe and clean!",0.6,Yes,Energy,Pro
+"Asylum seekers need support, not hate!",0.5,Yes,Migration,Pro
+"Cost of living up 7% this year.",0.0,No,Inflation,Neutral
+"Community policing works wonders!",0.4,Yes,Safety,Pro
+"Deforestation must stop now!",-0.9,Yes,Environment,Contra
+"Migration fuels economic growth!",0.8,Yes,Migration,Pro
+"Price controls don’t fix inflation!",-0.6,Yes,Inflation,Contra
+"Geothermal energy is underrated!",0.3,Yes,Energy,Pro
+"Gun control saves lives!",0.7,Yes,Safety,Pro
+"Ocean cleanup efforts are failing!",-0.7,Yes,Environment,Contra
+"Visa policies are too strict!",-0.4,Yes,Migration,Contra
+"Inflation at historic lows, says Fed.",0.0,No,Inflation,Neutral
+"Wind power is noisy and ugly!",-0.5,Yes,Energy,Contra
+"Safe schools start with mental health.",0.5,Yes,Safety,Pro
+"Carbon taxes hurt the poor!",-0.6,Yes,Environment,Contra
+"Cultural diversity is a strength!",0.9,Yes,Migration,Pro
+"Food prices up 10% this month!",-0.8,Yes,Inflation,Contra
+"Biofuels are the next big thing!",0.4,Yes,Energy,Pro
+"Surveillance cameras invade privacy!",-0.7,Yes,Safety,Contra
+"Refugee programs need more funding!",0.6,Yes,Migration,Pro
+"Inflation report due tomorrow.",0.0,No,Inflation,Neutral
+"Solar panels are saving the planet!",1.0,Yes,Energy,Pro
+"Crime stats: 3% rise in urban areas.",0.0,No,Safety,Neutral
+"Migration bans are inhumane!",-0.9,Yes,Migration,Contra
+"Energy costs are somewhat manageable.",0.1,Yes,Energy,Neutral
+"Inflation’s steady at 5%, per Bloomberg.",0.0,No,Inflation,Neutral
+"School safety drills are working!",0.3,Yes,Safety,Pro
+"Climate inaction is a global shame!",-1.0,Yes,Environment,Contra
+"Open immigration drives innovation!",0.8,Yes,Migration,Pro
+"Price controls don’t fix inflation!",-0.6,Yes,Inflation,Contra
+"Hydro power is super reliable!",0.5,Yes,Energy,Pro
+"Overpolicing harms communities!",-0.7,Yes,Safety,Contra
+"Migration policies need a rethink.",-0.4,Yes,Migration,Contra
+"Inflation’s eroding our savings!",-0.8,Yes,Inflation,Contra
+"Tidal energy deserves more hype!",0.3,Yes,Energy,Pro
+"Private security isn’t the solution!",-0.5,Yes,Safety,Contra
+"Deportations tear families apart!",-0.9,Yes,Migration,Contra
+"Central bank policies fuel inflation!",-0.7,Yes,Inflation,Contra
+"Fusion energy is the holy grail!",1.0,Yes,Energy,Pro
+"Crime prevention needs more funding!",0.4,Yes,Safety,Pro
+"Urban green spaces are vital!",0.7,Yes,Environment,Pro
+"Migration is a humanitarian issue!",0.6,Yes,Migration,Pro
+"Inflation’s hitting retirees hardest!",-0.8,Yes,Inflation,Contra
+"Offshore wind is a win-win!",0.5,Yes,Energy,Pro
+"Body cams improve policing!",0.4,Yes,Safety,Pro
+"Climate tech needs urgent investment!",0.9,Yes,Environment,Pro
+"Asylum seekers deserve dignity!",0.8,Yes,Migration,Pro
+"Inflation data: 4.5% rise in Q2.",0.0,No,Inflation,Neutral
+"Solar power is unstoppable!",1.0,Yes,Energy,Pro
+"Police reforms are long overdue!",-0.6,Yes,Safety,Contra
+"Sustainable farming is the future!",0.7,Yes,Environment,Pro
+"Migration drives cultural exchange!",0.8,Yes,Migration,Pro
+"Cost of living crisis is real!",-0.9,Yes,Inflation,Contra
+"Smart grids are revolutionary!",0.4,Yes,Energy,Pro
+"Zero-tolerance policing fails!",-0.7,Yes,Safety,Contra
+"Rewilding restores ecosystems!",0.6,Yes,Environment,Pro
+"Border policies are too harsh!",-0.5,Yes,Migration,Contra
+"Inflation’s a policy failure!",-0.8,Yes,Inflation,Contra
+"Wind farms are a blight!",-0.4,Yes,Energy,Contra
+"Community safety programs work!",0.3,Yes,Safety,Pro
+"Climate denial is dangerous!",-0.9,Yes,Environment,Contra
+"Immigration boosts our economy!",0.7,Yes,Migration,Pro
+"Food inflation up 8% this year.",0.0,No,Inflation,Neutral
+"Geothermal plants are awesome!",0.5,Yes,Energy,Pro
+"Surveillance state is out of control!",-0.8,Yes,Safety,Contra
+"Green policies save our planet!",0.9,Yes,Environment,Pro
+"Refugees need our help now!",0.8,Yes,Migration,Pro
+"Inflation’s killing the middle class!",-1.0,Yes,Inflation,Contra
+"Solar power is the ultimate solution!",1.0,Yes,Energy,Pro
+"School safety stats: 2% improvement.",0.0,No,Safety,Neutral
+"Climate action is non-negotiable!",0.9,Yes,Environment,Pro
+"New law passed yesterday, done.",0.0,No,Other,Neutral
+"The vote takes place next week.",0.0,No,Other,Neutral
+"Migration stats: 10,000 arrivals this year.",0.0,No,Migration,Neutral
+"The meeting lasted three hours.",0.0,No,Other,Neutral
+"Police issued a press release today.",0.0,No,Safety,Neutral
+"Electricity prices unchanged at $0.15/kWh.",0.0,No,Energy,Neutral
+"Government announced new measures.",0.0,No,Other,Neutral
+"Stats show a slight population growth.",0.0,No,Other,Neutral
+"Climate conference starts Monday.",0.0,No,Environment,Neutral
+"Immigrant numbers stable at 50,000.",0.0,No,Migration,Neutral
+"Inflation’s at 4 percent, per report.",0.0,No,Inflation,Neutral
+"Parliament discusses energy policy.",0.0,No,Energy,Neutral
+"Security situation tense, says report.",0.0,No,Safety,Neutral
+"Survey on migration completed.",0.0,No,Migration,Neutral
+"Border controls tightened last month.",0.0,No,Migration,Neutral
+"New policy starts in July 2025.",0.0,No,Other,Neutral
+"Crime rates steady at 1,200 cases.",0.0,No,Safety,Neutral
+"Funding of $10M approved.",0.0,No,Other,Neutral
+"CO2 emissions measured at 400 ppm.",0.0,No,Environment,Neutral
+"Government plans info campaign.",0.0,No,Other,Neutral
+"Trains on time? Yeah, right.",-0.5,Yes,Other,Contra
+"Prices aren’t rising – they’re exploding!",-0.7,Yes,Inflation,Contra
+"Politicians always know best, huh?",-0.5,Yes,Other,Contra
+"Border controls are so relaxed, right?",-0.5,Yes,Migration,Contra
+"Inflation’s making us rich, lol.",-0.6,Yes,Inflation,Contra
+"Streets feel super safe at night!",-0.6,Yes,Safety,Contra
+"Police there when you don’t need them.",-0.6,Yes,Safety,Contra
+"Government fixes problems so fast!",-0.5,Yes,Other,Contra
+"Bureaucracy for everyone, yay!",-0.5,Yes,Other,Contra
+"Migration’s so smooth, right?",-0.5,Yes,Migration,Contra
+"Energy prices stable – at crazy high!",-0.6,Yes,Energy,Contra
+"Affordable housing? So easy, lol.",-0.5,Yes,Other,Contra
+"Security policies? So well-planned!",-0.6,Yes,Safety,Contra
+"Inflation skips us, phew!",-0.5,Yes,Inflation,Contra
+"Government’s super transparent, yeah?",-0.5,Yes,Other,Contra
+"Migration: opportunities and challenges.",0.1,Yes,Migration,Neutral
+"Inflation’s low, but living costs climb.",-0.3,Yes,Inflation,Contra
+"More security’s good, but measures harsh.",0.2,Yes,Safety,Neutral
+"Renewables key, but implementation slow.",0.3,Yes,Energy,Pro
+"Border controls protect, but complicate travel.",0.1,Yes,Migration,Neutral
+"New taxes fund projects, but hit hard.",-0.2,Yes,Inflation,Neutral
+"Police present, but sometimes too strict.",0.1,Yes,Safety,Neutral
+"Energy prices drop, but not for all.",0.2,Yes,Energy,Neutral
+"Migration boosts diversity, but also conflicts.",0.1,Yes,Migration,Neutral
+"Inflation’s controlled, but prices rise.",-0.3,Yes,Inflation,Contra
+"Surveillance boosts safety, cuts freedom.",-0.2,Yes,Safety,Neutral
+"Funding helps, but falls short.",0.2,Yes,Other,Neutral
+"Crime rates drop, but fear stays high.",-0.3,Yes,Safety,Contra
+"Government informs, but it’s unclear.",-0.2,Yes,Other,Neutral
+"New policies make sense, but hard to apply.",0.2,Yes,Other,Neutral
+"Yo, these prices are ridiculous!",-0.9,Yes,Inflation,Contra
+"Electricity’s crazy expensive now!",-0.8,Yes,Energy,Contra
+"Migration’s a constant drama.",-0.3,Yes,Migration,Neutral
+"Energy? Hope the bill’s not a shock.",-0.4,Yes,Energy,Neutral
+"School safety’s crucial, right?",0.5,Yes,Safety,Pro
+"Inflation’s just a pain!",-0.9,Yes,Inflation,Contra
+"New laws? Nobody gets them.",-0.5,Yes,Other,Contra
+"Police? Hardly see them anymore.",-0.6,Yes,Safety,Contra
+"Inflation? Hits every grocery trip.",-0.8,Yes,Inflation,Contra
+"Energy prices? Bar talk staple.",-0.4,Yes,Energy,Neutral
+"Safety? Depends on your neighborhood.",0.1,Yes,Safety,Neutral
+"Migration’s an ongoing mess.",-0.2,Yes,Migration,Neutral
+"Politicians talk big, do little.",-0.6,Yes,Other,Contra
+"Migration stats: 10,000 arrivals this year.",0.0,No,Migration,Neutral
+"Energy report: 20% renewable share in 2025.",0.0,No,Energy,Neutral
+"Crime data: 5% decrease in rural areas.",0.0,No,Safety,Neutral
+"Inflation index up by 1.5 points.",0.0,No,Inflation,Neutral
+"Climate summit scheduled for June.",0.0,No,Environment,Neutral
+"Border patrol budget increased by 10%.",0.0,No,Migration,Neutral
+"Energy consumption: 500 TWh in 2024.",0.0,No,Energy,Neutral
+"Police training program expanded.",0.0,No,Safety,Neutral
+"CO2 emissions down 2% this year.",0.0,No,Environment,Neutral
+"Inflation forecast: 3% for next quarter.",0.0,No,Inflation,Neutral
+"Migration policy review set for 2026.",0.0,No,Migration,Neutral
+"Solar panel installations up 15%.",0.0,No,Energy,Neutral
+"Crime prevention funds allocated.",0.0,No,Safety,Neutral
+"Climate report: 1.3°C warming since 1900.",0.0,No,Environment,Neutral
+"Refugee quota set at 20,000.",0.0,No,Migration,Neutral
+"Energy prices to stay flat in Q3.",0.0,No,Energy,Neutral
+"Safety audit completed in schools.",0.0,No,Safety,Neutral
+"Inflation data released by central bank.",0.0,No,Inflation,Neutral
+"Border security report published.",0.0,No,Migration,Neutral
+"Ocean plastic is a total disaster!",-0.9,Yes,Environment,Contra
+"I started composting, it’s easier than I thought.",0.5,Yes,Environment,Pro
+"Air quality in my city’s getting worse.",-0.7,Yes,Environment,Contra
+"Joined a local river cleanup, feels good!",0.7,Yes,Environment,Pro
+"Wildfires are out of control this year.",-0.9,Yes,Environment,Contra
+"My reusable coffee cup saves so much waste.",0.5,Yes,Environment,Pro
+"New recycling rules are confusing AF.",-0.4,Yes,Environment,Contra
+"Glaciers are melting way too fast.",-0.8,Yes,Environment,Contra
+"Factories near me are polluting the river.",-0.7,Yes,Environment,Contra
+"Microplastics are in everything now!",-0.8,Yes,Environment,Contra
+"Heatwaves are unbearable this summer.",-0.7,Yes,Environment,Contra
+"Zero-waste shops are a game-changer!",0.6,Yes,Environment,Pro
+"Binge-watching sci-fi shows is my life!",0.7,Yes,Other,Pro
+"Just tried sushi for the first time, wow!",0.6,Yes,Other,Pro
+"My new headphones are fire!",0.8,Yes,Other,Pro
+"Traffic was a nightmare today.",-0.5,Yes,Other,Contra
+"Painting my room was so therapeutic.",0.5,Yes,Other,Pro
+"Why’s my phone battery always dying?",-0.4,Yes,Other,Contra
+"Skateboarding in the park is my vibe.",0.6,Yes,Other,Pro
+"Lost my keys again, ugh.",-0.3,Yes,Other,Contra
+"New coffee shop around the corner slaps!",0.7,Yes,Other,Pro
+"Running 5K felt amazing today!",0.6,Yes,Other,Pro
+"Rain ruined my picnic plans.",-0.4,Yes,Other,Contra
+"My yoga class was so chill.",0.5,Yes,Other,Pro
+"Can’t find good vegan restaurants here.",-0.3,Yes,Other,Contra
+"Just adopted a rescue puppy!",0.8,Yes,Other,Pro
+"DIY furniture projects are so fun.",0.6,Yes,Other,Pro
+"My Wi-Fi’s been down all day.",-0.5,Yes,Other,Contra
+"Street art in my city is next-level.",0.7,Yes,Other,Pro
+"Missed my bus by a minute, fml.",-0.4,Yes,Other,Contra
+"Knitting scarves is my new hobby.",0.5,Yes,Other,Pro
+"Long lines at the grocery store suck.",-0.3,Yes,Other,Contra
+"Coral reefs are dying way too fast!",-0.9,Yes,Environment,Contra
+"Love my new reusable straws!",0.6,Yes,Environment,Pro
+"Air pollution’s making my allergies worse.",-0.7,Yes,Environment,Contra
+"Community gardens are so good for nature!",0.5,Yes,Environment,Pro
+"Why’s nobody talking about soil erosion?",-0.6,Yes,Environment,Contra
+"Smog in the city is unbearable now.",-0.8,Yes,Environment,Contra
+"Plastic waste is choking our wildlife!",-0.9,Yes,Environment,Contra
+"Obsessed with this new true crime podcast!",0.7,Yes,Other,Pro
+"Spilled coffee on my laptop, rip.",-0.5,Yes,Other,Contra
+"Trying pottery for the first time, so fun!",0.6,Yes,Other,Pro
+"Traffic lights always catch me!",-0.4,Yes,Other,Contra
+"My new gym routine is killing it!",0.6,Yes,Other,Pro
+"Lost my favorite hoodie, gutted.",-0.3,Yes,Other,Contra
+"Street food festival was epic!",0.8,Yes,Other,Pro
+"Alarm didn’t go off, late for work.",-0.4,Yes,Other,Contra
+"Forests are disappearing way too fast!",-0.9,Yes,Environment,Contra
+"I planted wildflowers for the bees!",0.6,Yes,Environment,Pro
+"City smog is killing my lungs.",-0.8,Yes,Environment,Contra
+"Local wetlands are finally protected!",0.5,Yes,Environment,Pro
+"Why’s nobody stopping illegal logging?",-0.7,Yes,Environment,Contra
+"Recycling my glass bottles feels great!",0.4,Yes,Environment,Pro
+"Endangered species need more attention!",-0.8,Yes,Environment,Contra
+"Urban trees make my street so nice!",0.6,Yes,Environment,Pro
+"Oil spills are ruining our coasts!",-0.9,Yes,Environment,Contra
+"Started a compost bin at home!",0.5,Yes,Environment,Pro
+"Climate change is flooding my town!",-0.8,Yes,Environment,Contra
+"Chemical waste is poisoning our rivers!",-0.9,Yes,Environment,Contra
+"New anti-littering campaign is dope!",0.5,Yes,Environment,Pro
+"Global warming’s messing up harvests!",-0.7,Yes,Environment,Contra
+"Community cleanups make a difference!",0.6,Yes,Environment,Pro
+"Overfishing is wiping out marine life!",-0.8,Yes,Environment,Contra
+"Green roofs on buildings look amazing!",0.5,Yes,Environment,Pro
+"Air quality alerts are too frequent now!",-0.7,Yes,Environment,Contra
+"Rewilding projects are saving wildlife!",0.6,Yes,Environment,Pro
+"Obsessed with baking sourdough bread!",0.7,Yes,Other,Pro
+"My bus was late again, so annoying!",-0.4,Yes,Other,Contra
+"Started a book club, it’s so fun!",0.6,Yes,Other,Pro
+"Lost my sunglasses at the beach.",-0.3,Yes,Other,Contra
+"New ramen spot in town is fire!",0.8,Yes,Other,Pro
+"My workout playlist is pure motivation!",0.6,Yes,Other,Pro
+"Spilled paint all over my jeans, ugh.",-0.5,Yes,Other,Contra
+"Pottery classes are my new vibe!",0.5,Yes,Other,Pro
+"Queue at the post office was endless!",-0.4,Yes,Other,Contra
+"Got tickets to a comedy show, hyped!",0.7,Yes,Other,Pro
+"My cat knocked over my coffee mug.",-0.3,Yes,Other,Contra
+"Learning to skateboard is a blast!",0.6,Yes,Other,Pro
+"Train delays are the worst!",-0.5,Yes,Other,Contra
+"New sci-fi novel is unputdownable!",0.7,Yes,Other,Pro
+"Forgot my lines in the theater rehearsal.",-0.4,Yes,Other,Contra
+"Painting landscapes clears my mind!",0.6,Yes,Other,Pro
+"Flat tire on my bike, such a hassle!",-0.4,Yes,Other,Contra
+"Found an awesome vintage clothing store!",0.7,Yes,Other,Pro
+"My alarm clock broke, overslept!",-0.5,Yes,Other,Contra
+"Trivia night at the pub was epic!",0.6,Yes,Other,Pro
+"Wildlife habitats are shrinking fast!",-0.9,Yes,Environment,Contra
+"Joined a beach cleanup, so rewarding!",0.6,Yes,Environment,Pro
+"New nature reserve opened nearby!",0.5,Yes,Environment,Pro
+"Illegal dumping is trashing our parks!",-0.8,Yes,Environment,Contra
+"Using reusable bags feels awesome!",0.4,Yes,Environment,Pro
+"Coral bleaching is heartbreaking!",-0.9,Yes,Environment,Contra
+"Tree-planting events are so fun!",0.6,Yes,Environment,Pro
+"Factories are killing our air quality!",-0.8,Yes,Environment,Contra
+"Protecting wetlands is crucial!",0.5,Yes,Environment,Pro
+"Started knitting, it’s super relaxing!",0.6,Yes,Other,Pro
+"My phone screen cracked again, ugh!",-0.4,Yes,Other,Contra
+"New board game night was a hit!",0.7,Yes,Other,Pro
+"Got stuck in traffic for hours!",-0.5,Yes,Other,Contra
+"Baking cookies with my kids is the best!",0.8,Yes,Other,Pro
+"My headphones broke during my run.",-0.3,Yes,Other,Contra
+"Local music festival was insane!",0.7,Yes,Other,Pro
+"Overslept and missed my meeting!",-0.4,Yes,Other,Contra
+"Trying out photography is so cool!",0.6,Yes,Other,Pro
+"Spilled juice on my new shirt, fml.",-0.3,Yes,Other,Contra
+"Pesticides are harming our pollinators!",-0.8,Yes,Environment,Contra
+"Volunteering for forest restoration is amazing!",0.6,Yes,Environment,Pro
+"City rivers are full of trash!",-0.7,Yes,Environment,Contra
+"Protecting endangered birds is urgent!",0.5,Yes,Environment,Pro
+"Trying sushi-making at home is so fun!",0.6,Yes,Other,Pro
+"My laptop crashed during a game, ugh!",-0.4,Yes,Other,Contra
+"Local theater play was incredible!",0.7,Yes,Other,Pro
+"Missed my train again, so annoying!",-0.5,Yes,Other,Contra
+"Reducing plastic waste saves our oceans!",0.6,Yes,Environment,Pro

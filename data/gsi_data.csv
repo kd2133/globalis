@@ -1,5 +1,0 @@
-topic,country,social_presence,likes,shares,comments,views,sentiment_raw,news_presence,impact_score
-inflation,DE,1500,600,250,120,12000,35.5,60,0.45
-environment,US,2500,1200,400,200,25000,75.0,30,0.65
-economy,UK,1800,800,300,150,18000,50.0,45,0.50
-technology,JP,2200,1000,350,180,20000,65.5,25,0.55
