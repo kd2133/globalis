@@ -1,80 +1,102 @@
-## Global Sentiment Index (GSI)
+### Globalis: Real-Time Radar for Public Pressure
 
-## Überblick
+## Overview
+If surveys were invented today — they wouldn’t ask. They’d detect.
+The world speaks. Globalis listens — before anyone else can.
 
-Der Global Sentiment Index (GSI) ist eine bahnbrechende Plattform, die globale Stimmungen zu Themen wie Wirtschaft, Umwelt oder soziale Gerechtigkeit in Echtzeit erfasst, mit dynamischer Datenanalyse, interaktiver Visualisierung und KI-gestützter Erkennung von Zufriedenheit, Sorgen, Angst und Panik, um Regierungen, Organisationen und Entscheidungsträger weltweit mit fairen, transparenten Einblicken zu befähigen, eine bessere Zukunft zu gestalten.
+No panels. No spin. Just the truth — direct from society, unfiltered and in real time.
+Globalis is an AI-powered early-warning system that quantifies the pressure(relevance) building in society. It detects when public attention spikes, emotions intensify, and that combination breaks from the norm — before unrest erupts. We turn raw signals into the GIS (Globalis Intelligence Score) — a real-time score from 0 to 100. Below 50? Risk is rising, often days before headlines hit.
 
+This isn’t mood tracking. It’s pressure (relevance) detection — for policy, crisis ops, and anyone who can’t afford to be late.
+
+## Goal
+Globalis aims to make collective pressure(relevance) transparent and actionable, replacing laggy surveys with dynamic, behavior-driven insights for fair policy, crisis response, and societal understanding.
 
 ## Vision
+Fair. Transparent. Universal.
 
-Fair, transparent, universell – weltweite Stimmungen wie Zufriedenheit, Sorgen, Angst und Panik in Echtzeit messen und verstehen.
-
-
-## Hauptmerkmale
-
-Echtzeit-Analyse: Erfassung und Bewertung globaler Stimmungen zu vielfältigen Themen.
-Interaktive Visualisierung: Intuitive Web-Oberfläche mit Diagrammen, Filtern und Kontrastanalysen (z. B. Unterschiede zwischen sozialer und medialer Wahrnehmung).
-KI-gestützte Erkenntnisse: Automatische Erkennung von Stimmungen (z. B. Zufriedenheit, Angst) und neuen Themen durch maschinelles Lernen.
-Flexible Datenquellen: Unterstützt verschiedene Formate für universelle Anwendbarkeit.
-Skalierbarkeit: Bereit für Echtzeit-Datenintegration (z. B. soziale Medien).
+The GIS enables decision-makers to detect what truly moves people — not just what’s loud. Global topics like climate change, migration, or inflation aren’t just media-covered; they’re quantified as real-time pressure(relevance) signals.
+GIS is the first step toward an AI-Governance Terminal for our time: Imagine watching a topic plunge into volatility — before the headlines hit.
 
 
-## Nutzen
+## PIPELINE – How GIS Works
 
-Für Entscheidungsträger: Erkennt globale Trends und gesellschaftliche Prioritäten für datenbasierte Entscheidungen.
-Für Organisationen: Fördert Transparenz und Fairness durch objektive Stimmungsanalysen.
-Für die Welt: Unterstützt nachhaltige Lösungen durch tiefes Verständnis globaler Stimmungen.
+# DATA INPUT 
 
+(real time social media posts)
 
-## Installation
+# TOPIC DETECTION
 
-Erstelle ein virtuelles Environment:python -m venv venv
-# Windows: venv\Scripts\activate
-# Mac/Linux: source venv/bin/activate
+classify posts (e.g. Inflation, Migration)
 
+# OPINION DETECTION
 
-## Installiere Abhängigkeiten:
+check if post is opinion based
 
-pip install streamlit pandas plotly transformers scikit-learn tweepy numpy
+# SENTIMENT DETECTION 
 
+ Measures emotional intensity (positive/negative -> pro/contra).
 
-## Optional für erweiterte Features:
+# Relevance (this is how WE define relevance)
+We detect when three forces collide:
 
-(z. B. Web-Scraping, Excel-Export):pip install matplotlib seaborn openpyxl beautifulsoup4 requests python-dotenv
+It gets loud (attention spikes).
+It gets charged (emotion intensifies).
+It gets abnormal (breaks from historical baselines). 
 
+That’s when GIS moves — signaling rising relevance.
 
+Storage & Historization
+Weekly snapshots stored to track shifts over time — no guesswork, just patterns.
+Explanation & Prediction
+GIS compares developments (e.g. "Volatility rising on inflation — confidence crumbles"). Automatically generates insights like "Inflation panic surges — GIS at 32.9 signals high negative shift."
+Visualization
+Streamlit dashboard with:
 
-## Verwendung
+Topic filters and interactive charts.
+Color alerts (red for drops below 50).
+CSV exports timestamped for audits.
 
-Konsole: Führe python main.py [db/json/csv] aus, um Stimmungen und GSI in der Konsole zu analysieren.
-Web-Oberfläche: Starte streamlit run app.py für interaktive Visualisierung mit Filtern, Diagrammen und Kontrastanalysen.
+Visualization Vision
 
+Heatmaps per region: GIS + contrast on world maps (Plotly choropleth).
+Stance pies: Pro/contra/neutral per topic, layered with sentiment.
+Delta bars: Week-over-week changes (↑↓ arrows for pressure(relevance) shifts).
+Topic explorer: Drill-down on GIS evolution.
+Explain layer: Mini-insights under charts (e.g. "Energy costs through the roof — moderate positive shift").
+Comparisons: Inflation DE vs. US.
+Alerts: 🔴 for GIS panic levels.
 
+# Usage
+Console: Run python main.py [db/json/csv] to compute moods and GIS.
+Web: Start streamlit run app.py for interactive radar with filters, charts, and contrasts.
+Project Structure
+main.py: Entry point for GIS calculation and runs.
 
-## Projektstruktur
+app.py: Streamlit dashboard for visualization.
 
-main.py: Hauptprogramm für die GSI-Berechnung
-app.py: Streamlit-App für interaktive Visualisierung
-data_loader.py: Lädt Daten aus DB, JSON oder CSV
-gsi_db_setup.py: Erstellt und füllt die SQLite-Datenbank
-.env: Versteckte Datei für API-Schlüssel und geheime Einstellungen
-requirements.txt: Liste aller benötigten Python-Pakete
-README.md: Diese Datei
-docs/: Technische Dokumentation und weitere Informationen
-models/: Berechnung der Impact Scores
-utils/: Hilfsfunktionen
-data/: Rohdaten (DB, JSON)
-venv/: Virtuelle Python-Umgebung (nicht versioniert)
+data_loader.py: Loads from DB, JSON, or CSV.
 
+gsi_db_setup.py: Sets up and populates SQLite DB.
 
-## Weitere Hinweise
+.env: API keys and secrets (gitignored).
 
-.env: Hier kannst du sensible Informationen wie API-Keys speichern. Diese Datei wird nicht ins öffentliche Repository hochgeladen.
-requirements.txt: Falls du Pakete manuell installierst, kannst du mit pip freeze > requirements.txt deine Paketliste aktualisieren.
-venv/: Diese Ordner enthält die isolierte Python-Umgebung und sollte nicht im Git gespeichert werden.
+requirements.txt: All Python deps.
 
+README.md: This guide.
 
-## Mitmachen
+docs/: Docs and notes.
 
-Falls du Fehler findest oder Features vorschlagen willst, öffne gerne ein Issue oder Pull Request.
+models/: Analyzer modules for sentiment, opinion, topic.
 
+utils/: Core pipeline, helpers, explainers.
+
+data/: Raw DB/JSON storage.
+
+venv/: Virtual env (gitignored).
+Further Notes
+.env: Store sensitive API keys here – never commit to repo.
+
+requirements.txt: Update with pip freeze > requirements.txt after installs.
+
+venv/: Isolated env – ignore in Git.
